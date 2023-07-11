@@ -1,7 +1,15 @@
 import { Flex, Icon, Input } from "@chakra-ui/react";
+import { useRef } from "react";
 import { RiSearchLine } from "react-icons/ri";
 
+// 'debounce' is a pattern to search only when user stops to digit
+// generally the stop time is around 1 and 3 seconds
+
 export function SearchBox() {
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  console.log(searchInputRef?.current?.value);
+
   return (
     <Flex
       as="label"
@@ -17,6 +25,7 @@ export function SearchBox() {
       borderRadius={"full"}
     >
       <Input
+        ref={searchInputRef}
         color={"gray.50"}
         variant={"unstyled"}
         px={"4"}
