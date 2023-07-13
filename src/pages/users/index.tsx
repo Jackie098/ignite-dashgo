@@ -18,6 +18,7 @@ import {
   useBreakpointValue,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useEffect } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
 export default function UserList() {
@@ -25,6 +26,12 @@ export default function UserList() {
     base: false,
     lg: true,
   });
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  }, []);
 
   return (
     <Box>
@@ -41,11 +48,11 @@ export default function UserList() {
 
             <Link href={"/users/create"} passHref>
               <Button
-                as="a"
                 size={"sm"}
                 fontSize={"small"}
                 colorScheme="pink"
                 leftIcon={<Icon as={RiAddLine} fontSize={20} />}
+                suppressHydrationWarning
               >
                 Create new
               </Button>
