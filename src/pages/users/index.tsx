@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { useUsers } from "@/services/hooks/useUsers";
 import {
   Box,
   Button,
@@ -8,46 +9,21 @@ import {
   Flex,
   Heading,
   Icon,
+  Spinner,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
-  Text,
   useBreakpointValue,
-  Spinner,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useEffect } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import { useQuery } from "react-query";
 
 export default function UserList() {
-  const { data, isLoading, error, isFetching, refetch } = useQuery(
-    "users",
-    async () => {
-      const response = await fetch("http://localhost:3000/api/users");
-
-      const data = await response.json();
-
-      const users = data.users.map((user) => {
-        return {
-          ...user,
-          createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          }),
-        };
-      });
-
-      return users;
-    },
-    {
-      staleTime: 1000 * 5,
-    }
-  );
+  const { data, isLoading, error, isFetching, refetch } = useUsers();
 
   // console.log({ query });
 
@@ -55,6 +31,10 @@ export default function UserList() {
     base: false,
     lg: true,
   });
+
+  if (!data) {
+    return <Spinner size="sm" color="gray.500" ml="4" />;
+  }
 
   return (
     <Box>
