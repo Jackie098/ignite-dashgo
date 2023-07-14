@@ -24,7 +24,7 @@ import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useQuery } from "react-query";
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading, error, isFetching, refetch } = useQuery(
     "users",
     async () => {
       const response = await fetch("http://localhost:3000/api/users");
@@ -67,19 +67,34 @@ export default function UserList() {
           <Flex mb={8} justify={"space-between"} align={"center"}>
             <Heading size={"lg"} fontWeight={"normal"}>
               Users
+              {!isLoading && isFetching && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
 
-            <Link href={"/users/create"} passHref>
+            <Flex>
               <Button
+                onClick={() => refetch()}
                 size={"sm"}
                 fontSize={"small"}
-                colorScheme="pink"
-                leftIcon={<Icon as={RiAddLine} fontSize={20} />}
-                suppressHydrationWarning
+                colorScheme="purple"
+                mr={4}
+                // leftIcon={<Icon as={RiAddLine} fontSize={20} />}
               >
-                Create new
+                Update data
               </Button>
-            </Link>
+              <Link href={"/users/create"} passHref>
+                <Button
+                  size={"sm"}
+                  fontSize={"small"}
+                  colorScheme="pink"
+                  leftIcon={<Icon as={RiAddLine} fontSize={20} />}
+                  // suppressHydrationWarning
+                >
+                  Create new
+                </Button>
+              </Link>
+            </Flex>
           </Flex>
 
           {isLoading ? (
